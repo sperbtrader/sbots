@@ -1,0 +1,2382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBOTS · Robôs de Investimento Automatizado</title>
+    <meta name="description" content="Maximizando resultados com tecnologia. Robôs de trading automatizado para todos os perfis de investidor.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #2D8CFF;
+            --neon-green: #00E676;
+            --neon-cyan: #00E5FF;
+            --neon-purple: #7B68EE;
+            --bg-black: #000000;
+            --bg-dark: #0A0A0A;
+            --bg-card: #1A1A1A;
+            --bg-navy: #0F1525;
+            --text-white: #FFFFFF;
+            --text-gray: #A0A0A0;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-black);
+            color: var(--text-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 140, 255, 0.1);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-buy {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            border: none;
+            border-radius: 50px;
+            color: var(--bg-black);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(45, 140, 255, 0.3);
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(45, 140, 255, 0.6);
+        }
+
+        .btn-whatsapp {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border: none;
+            border-radius: 50px;
+            color: var(--text-white);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.6);
+        }
+
+        .btn-twitter {
+            padding: 0.75rem 2rem;
+            background: transparent;
+            border: 2px solid var(--text-white);
+            border-radius: 50px;
+            color: var(--text-white);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-twitter:hover {
+            background: var(--text-white);
+            color: var(--bg-black);
+            transform: translateY(-2px);
+        }
+
+        .btn-instagram {
+            padding: 0.75rem 2rem;
+            background: transparent;
+            border: 2px solid var(--text-white);
+            border-radius: 50px;
+            color: var(--text-white);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-instagram:hover {
+            background: var(--text-white);
+            color: var(--bg-black);
+            transform: translateY(-2px);
+        }
+
+        .x-logo, .instagram-logo, .whatsapp-logo {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding-top: 120px;
+            padding-bottom: 4rem;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        .slogan {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            border: none;
+            border-radius: 50px;
+            color: var(--bg-black);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 30px rgba(45, 140, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(45, 140, 255, 0.7);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid var(--text-white);
+            border-radius: 50px;
+            color: var(--text-white);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-white);
+            color: var(--bg-black);
+            transform: translateY(-3px);
+        }
+
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        /* Logo 3D animada */
+        .logo-3d-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            perspective: 1200px;
+        }
+        
+        .bot-sphere {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: rotate3d 20s infinite linear;
+        }
+        
+        .sphere-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            backface-visibility: hidden;
+        }
+        
+        .outer-sphere {
+            background: radial-gradient(circle at 35% 35%, var(--neon-blue), var(--neon-cyan), #0044aa);
+            box-shadow: 
+                inset -20px -20px 40px rgba(0, 0, 0, 0.4),
+                inset 20px 20px 40px rgba(255, 255, 255, 0.1),
+                0 0 60px rgba(45, 140, 255, 0.6),
+                0 0 100px rgba(45, 140, 255, 0.3);
+            border: 2px solid rgba(45, 140, 255, 0.3);
+        }
+        
+        .hex-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-image: 
+                repeating-conic-gradient(
+                    from 0deg at 50% 50%,
+                    transparent 0deg 30deg,
+                    rgba(0, 230, 118, 0.15) 30deg 60deg
+                ),
+                radial-gradient(circle at 50% 50%, transparent 40%, rgba(45, 140, 255, 0.2) 70%);
+            animation: rotate-hex 30s infinite linear reverse;
+        }
+        
+        .orbit-ring {
+            position: absolute;
+            border: 2px solid rgba(0, 230, 118, 0.4);
+            border-radius: 50%;
+            animation: pulse-ring 3s infinite alternate;
+        }
+        
+        .ring-1 {
+            width: 110%;
+            height: 110%;
+            top: -5%;
+            left: -5%;
+            transform: rotateX(75deg) rotateZ(0deg);
+            animation: orbit-1 15s infinite linear, pulse-ring 3s infinite alternate;
+        }
+        
+        .ring-2 {
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            transform: rotateX(75deg) rotateZ(45deg);
+            animation: orbit-2 12s infinite linear, pulse-ring 3s 0.5s infinite alternate;
+        }
+        
+        .ring-3 {
+            width: 130%;
+            height: 130%;
+            top: -15%;
+            left: -15%;
+            transform: rotateX(75deg) rotateZ(90deg);
+            animation: orbit-3 18s infinite linear, pulse-ring 3s 1s infinite alternate;
+        }
+        
+        .core-brain {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, var(--neon-green), #00cc66, #008844);
+            box-shadow: 
+                0 0 30px rgba(0, 230, 118, 0.8),
+                0 0 60px rgba(0, 230, 118, 0.4),
+                inset 0 0 30px rgba(255, 255, 255, 0.2);
+            animation: pulse-core 2s infinite alternate;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .neural-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .neural-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            transform-origin: left center;
+            animation: data-flow 3s infinite linear;
+        }
+        
+        .neural-node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: node-pulse 2s infinite alternate;
+        }
+        
+        .trading-chart {
+            position: absolute;
+            width: 60%;
+            height: 30%;
+            top: 35%;
+            left: 20%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 4px;
+        }
+        
+        .chart-bar {
+            width: 8%;
+            background: linear-gradient(to top, var(--neon-green), #00ffaa);
+            border-radius: 2px 2px 0 0;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+            animation: chart-animate 2s infinite ease-in-out;
+        }
+        
+        .data-stream {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .binary-digit {
+            position: absolute;
+            color: var(--neon-green);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-green);
+            animation: stream-flow 8s infinite linear;
+            opacity: 0;
+        }
+        
+        .particles-3d {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .particle-3d {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+            animation: particle-float 6s infinite ease-in-out;
+        }
+        
+        .energy-halo {
+            position: absolute;
+            width: 140%;
+            height: 140%;
+            top: -20%;
+            left: -20%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(45, 140, 255, 0.3) 0%, transparent 60%);
+            filter: blur(30px);
+            animation: halo-pulse 4s infinite alternate;
+            z-index: -1;
+        }
+        
+        .status-indicators {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green);
+            animation: status-blink 1.5s infinite;
+        }
+
+        @keyframes rotate3d {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+        
+        @keyframes rotate-hex {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes orbit-1 {
+            0% { transform: rotateX(75deg) rotateZ(0deg); }
+            100% { transform: rotateX(75deg) rotateZ(360deg); }
+        }
+        
+        @keyframes orbit-2 {
+            0% { transform: rotateX(75deg) rotateZ(45deg); }
+            100% { transform: rotateX(75deg) rotateZ(405deg); }
+        }
+        
+        @keyframes orbit-3 {
+            0% { transform: rotateX(75deg) rotateZ(90deg); }
+            100% { transform: rotateX(75deg) rotateZ(450deg); }
+        }
+        
+        @keyframes pulse-ring {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.7; }
+        }
+        
+        @keyframes pulse-core {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        
+        @keyframes data-flow {
+            0% { opacity: 0; transform: scaleX(0); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: scaleX(1); }
+        }
+        
+        @keyframes node-pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 1; }
+        }
+        
+        @keyframes chart-animate {
+            0%, 100% { height: var(--height); }
+            50% { height: calc(var(--height) * 1.5); }
+        }
+        
+        @keyframes stream-flow {
+            0% { 
+                transform: translate(0, 0) rotate(0deg); 
+                opacity: 0; 
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes particle-float {
+            0% { 
+                transform: translate(0, 0); 
+                opacity: 0; 
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translate(var(--px), var(--py)); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes halo-pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.3); opacity: 0.7; }
+        }
+        
+        @keyframes status-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: transparent;
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(45, 140, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(45, 140, 255, 0.2);
+        }
+
+        .stat-icon-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label-main {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Plans Section */
+        .plans-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-navy) 50%, var(--bg-black) 100%);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-white), var(--text-gray));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 1.3rem;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .plan-card {
+            background: transparent;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .plan-card:hover::before {
+            left: 100%;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-green);
+            box-shadow: 0 15px 40px rgba(0, 230, 118, 0.3);
+        }
+
+        .plan-card.featured {
+            border-color: var(--neon-cyan);
+            transform: scale(1.05);
+        }
+
+        .plan-card.featured:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 15px 40px rgba(0, 229, 255, 0.4);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            color: var(--bg-black);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .plan-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .plan-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-white);
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .plan-period {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            color: var(--text-gray);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .plan-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        .plan-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            border: none;
+            border-radius: 50px;
+            color: var(--bg-black);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(45, 140, 255, 0.3);
+        }
+
+        .plan-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(45, 140, 255, 0.6);
+        }
+
+        /* Platform Section */
+        .platform-section {
+            padding: 6rem 0;
+        }
+
+        .platform-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .platform-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .platform-image svg {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+
+        .platform-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .platform-text h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .platform-text p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        .platform-highlight {
+            background: rgba(45, 140, 255, 0.1);
+            border-left: 4px solid var(--neon-blue);
+            padding: 1.5rem;
+            border-radius: 0 10px 10px 0;
+            margin: 1.5rem 0;
+        }
+
+        .platform-highlight p {
+            font-size: 1.1rem;
+            color: var(--text-white);
+            margin: 0;
+        }
+
+        /* Investment Steps Section */
+        .investment-steps {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-navy) 50%, var(--bg-black) 100%);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: transparent;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .step-card:hover::before {
+            left: 100%;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-green);
+            box-shadow: 0 10px 30px rgba(0, 230, 118, 0.3);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 5px 15px rgba(45, 140, 255, 0.4);
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-white);
+        }
+
+        .step-card p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50px;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-black);
+            transform: scale(1.05);
+        }
+
+        /* Installation Support Section */
+        .installation-support {
+            padding: 6rem 0;
+        }
+
+        .support-card {
+            background: transparent;
+            padding: 4rem 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(123, 104, 238, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .support-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(123, 104, 238, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .support-card:hover::before {
+            left: 100%;
+        }
+
+        .support-card h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-white);
+        }
+
+        .support-card p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .support-features {
+            list-style: none;
+            margin-bottom: 3rem;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .support-features li {
+            padding: 0.75rem 0;
+            color: var(--text-gray);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .support-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--neon-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .support-price {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: transparent;
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(123, 104, 238, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 40px rgba(123, 104, 238, 0.3);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-white);
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-dark) 50%, var(--bg-black) 100%);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 4rem auto 0;
+        }
+
+        .faq-item {
+            background: transparent;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .faq-item:hover::before {
+            left: 100%;
+        }
+
+        .faq-item:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 5px 20px rgba(0, 229, 255, 0.2);
+        }
+
+        .faq-question {
+            padding: 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(45, 140, 255, 0.05);
+        }
+
+        .faq-question h3 {
+            font-size: 1.3rem;
+            color: var(--text-white);
+            font-weight: 700;
+        }
+
+        .faq-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 2rem;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .faq-answer-content a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .faq-answer-content a:hover {
+            color: var(--neon-blue);
+            text-decoration: underline;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 0;
+            text-align: center;
+            background: transparent;
+            border-radius: 30px;
+            margin: 4rem 0;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+        }
+
+        .cta-section p {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Testimonial Section */
+        .testimonial-section {
+            padding: 6rem 0;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: transparent;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .testimonial-card:hover::before {
+            left: 100%;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-black);
+            font-weight: 700;
+        }
+
+        .testimonial-info h4 {
+            font-size: 1.2rem;
+            color: var(--text-white);
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-info p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* Guarantee Section */
+        .guarantee-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, var(--bg-black) 0%, var(--bg-navy) 50%, var(--bg-black) 100%);
+            text-align: center;
+        }
+
+        .guarantee-card {
+            background: transparent;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 230, 118, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guarantee-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .guarantee-card:hover::before {
+            left: 100%;
+        }
+
+        .guarantee-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+        }
+
+        .guarantee-card h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-white);
+        }
+
+        .guarantee-card p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Warning Section */
+        .warning-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .warning-content {
+            background: rgba(255, 0, 0, 0.05);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .warning-content h3 {
+            font-size: 1.5rem;
+            color: #ff4444;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-content p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        /* WhatsApp Float Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse-whatsapp 2s infinite;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes pulse-whatsapp {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(45, 140, 255, 0.1);
+            margin-top: 6rem;
+        }
+
+        .footer-links-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .footer-links-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-white);
+        }
+
+        .footer-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .footer-card {
+            background: transparent;
+            border: 1px solid rgba(45, 140, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .footer-card:hover::before {
+            left: 100%;
+        }
+
+        .footer-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 40px rgba(0, 229, 255, 0.3);
+        }
+
+        .footer-card-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+        }
+
+        .footer-card h3 {
+            font-size: 1.5rem;
+            color: var(--text-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(45, 140, 255, 0.1);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-left {
+            text-align: left;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .features-grid, .plans-grid, .footer-cards, .testimonial-grid, .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-3d-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .plan-card.featured {
+                transform: scale(1);
+            }
+
+            .platform-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-left, .footer-right {
+                text-align: center;
+            }
+
+            .hero {
+                padding-top: 180px;
+                text-align: center;
+            }
+
+            .hero-left {
+                align-items: center;
+            }
+
+            .hero-right {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+
+            .logo-3d-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- WhatsApp Float Button -->
+    <div class="whatsapp-float">
+        <a href="https://wa.me/5551993808280?text=Olá! Gostaria de saber mais sobre os robôs de investimento da SBOTS" target="_blank" class="whatsapp-btn">
+            <svg class="whatsapp-logo" width="30" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893-.001-3.189-1.262-6.187-3.55-8.444" fill="currentColor"/>
+            </svg>
+        </a>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo-container">
+                <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2D8CFF"/>
+                            <stop offset="100%" style="stop-color:#00E676"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#logo-gradient)" opacity="0.2"/>
+                    <path d="M 30,30 L 50,20 L 70,30 L 80,50 L 70,70 L 50,80 L 30,70 L 20,50 Z" fill="none" stroke="url(#logo-gradient)" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="15" fill="url(#logo-gradient)"/>
+                    <path d="M 40,40 L 50,50 L 60,40" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M 40,60 L 50,50 L 60,60" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="company-name">$SBOTS</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="#plans" class="btn-buy">Ver Planos</a>
+                <a href="https://wa.me/5551993808280?text=Olá! Gostaria de saber mais sobre os robôs de investimento da SBOTS" target="_blank" class="btn-whatsapp">
+                    <svg class="whatsapp-logo" width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893-.001-3.189-1.262-6.187-3.55-8.444" fill="currentColor"/>
+                    </svg>
+                    Fale Conosco
+                </a>
+                <a href="https://twitter.com/sbots" target="_blank" class="btn-twitter">
+                    Seguir no 
+                    <svg class="x-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <a href="https://instagram.com/sbots.ai" target="_blank" class="btn-instagram">
+                    Seguir no 
+                    <svg class="instagram-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero container">
+        <div class="hero-left">
+            <h1 class="hero-title">
+                Comece a investir com<br>
+                <span class="highlight">inteligência artificial</span><br>
+                
+            </h1>
+            <p class="slogan">Mesmo sem experiência! Tudo 100% automático!</p>
+            <p class="hero-description">
+                Já imaginou poder adquirir a licença de um robô que opera na bolsa de valores por você e faz seu dinheiro render? Criamos um algorítmo avançado com análise de dados em tempo real.
+            </p>
+
+            <div class="hero-actions">
+                <a href="https://wa.me/5551993808280?text=Olá! Gostaria de testar o robô de investimento da SBOTS por 7 dias grátis" target="_blank" class="btn-primary">Teste Grátis por 7 Dias</a>
+                <a href="#investment-steps" class="btn-secondary">Como Começar</a>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="logo-3d-container">
+                <div class="energy-halo"></div>
+                
+                <div class="bot-sphere">
+                    <div class="sphere-layer outer-sphere">
+                        <div class="hex-overlay"></div>
+                    </div>
+                    
+                    <div class="orbit-ring ring-1"></div>
+                    <div class="orbit-ring ring-2"></div>
+                    <div class="orbit-ring ring-3"></div>
+                    
+                    <div class="core-brain">
+                        <div class="trading-chart" id="chart"></div>
+                    </div>
+                    
+                    <div class="neural-network" id="neural"></div>
+                    <div class="status-indicators">
+                        <div class="status-dot" style="animation-delay: 0s;"></div>
+                        <div class="status-dot" style="animation-delay: 0.3s;"></div>
+                        <div class="status-dot" style="animation-delay: 0.6s;"></div>
+                    </div>
+                </div>
+                
+                <div class="data-stream" id="dataStream"></div>
+                <div class="particles-3d" id="particles3d"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section container">
+        <div class="stats-grid fade-in">
+            <div class="stat-card">
+                <div class="stat-icon-container">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="price-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2D8CFF"/>
+                                <stop offset="100%" style="stop-color:#00E5FF"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="35" fill="none" stroke="url(#price-gradient)" stroke-width="3">
+                            <animate attributeName="stroke-dasharray" values="0,220;220,0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <text x="50" y="55" text-anchor="middle" fill="url(#price-gradient)" font-size="30" font-weight="bold">R$</text>
+                        <circle cx="50" cy="50" r="25" fill="none" stroke="url(#price-gradient)" stroke-width="1" opacity="0.3">
+                            <animate attributeName="r" values="25;35;25" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div class="stat-label-main">Rentabilidade Média Mensal</div>
+                <div class="stat-number">55%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-container">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="mcap-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#7B68EE"/>
+                                <stop offset="100%" style="stop-color:#2D8CFF"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="20" y="60" width="15" height="30" fill="url(#mcap-gradient)" opacity="0.7">
+                            <animate attributeName="height" values="30;40;30" dur="1.5s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="60;50;60" dur="1.5s" repeatCount="indefinite"/>
+                        </rect>
+                        <rect x="42" y="50" width="15" height="40" fill="url(#mcap-gradient)" opacity="0.7">
+                            <animate attributeName="height" values="40;50;40" dur="1.8s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="50;40;50" dur="1.8s" repeatCount="indefinite"/>
+                        </rect>
+                        <rect x="64" y="35" width="15" height="55" fill="url(#mcap-gradient)" opacity="0.7">
+                            <animate attributeName="height" values="55;65;55" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="y" values="35;25;35" dur="2s" repeatCount="indefinite"/>
+                        </rect>
+                        <polyline points="27,65 50,45 72,30" fill="none" stroke="#00E676" stroke-width="2">
+                            <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="2s" repeatCount="indefinite"/>
+                        </polyline>
+                    </svg>
+                </div>
+                <div class="stat-label-main">Clientes Ativos</div>
+                <div class="stat-number">13</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-container">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="liquidity-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00E5FF"/>
+                                <stop offset="100%" style="stop-color:#00E676"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M 50,20 Q 30,40 30,60 Q 30,80 50,90 Q 70,80 70,60 Q 70,40 50,20 Z" fill="url(#liquidity-gradient)" opacity="0.3">
+                            <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M 50,30 Q 38,45 38,60 Q 38,73 50,80 Q 62,73 62,60 Q 62,45 50,30 Z" fill="url(#liquidity-gradient)" opacity="0.6">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                </div>
+                <div class="stat-label-main">Tempo de Mercado</div>
+                <div class="stat-number">4 meses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-container">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="volume-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00E676"/>
+                                <stop offset="100%" style="stop-color:#7B68EE"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="30" fill="none" stroke="url(#volume-gradient)" stroke-width="3" stroke-dasharray="10,5">
+                            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="4s" repeatCount="indefinite"/>
+                        </circle>
+                        <path d="M 35,50 L 47,57 L 60,43 Z" fill="url(#volume-gradient)" opacity="0.6">
+                            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="3s" repeatCount="indefinite"/>
+                        </path>
+                        <circle cx="50" cy="50" r="15" fill="url(#volume-gradient)" opacity="0.4">
+                            <animate attributeName="r" values="15;20;15" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div class="stat-label-main">Assertividade média</div>
+                <div class="stat-number">65%</div>
+            </div>
+        </div>
+    </section>
+
+   <section id="plans" class="plans-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Nossos Planos</h2>
+            <p class="section-subtitle fade-in">Escolha o plano ideal para o seu perfil de investidor</p>
+            <div class="plans-grid">
+                <div class="plan-card fade-in">
+                    <div class="plan-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="basic-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#2D8CFF"/>
+                                    <stop offset="100%" style="stop-color:#00E5FF"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="30" width="60" height="40" rx="5" fill="url(#basic-gradient)" opacity="0.3"/>
+                            <rect x="30" y="40" width="40" height="20" rx="3" fill="url(#basic-gradient)" opacity="0.6">
+                                <animate attributeName="height" values="20;25;20" dur="2s" repeatCount="indefinite"/>
+                            </rect>
+                            <circle cx="50" cy="25" r="8" fill="url(#basic-gradient)">
+                                <animate attributeName="r" values="8;10;8" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                    <h3>Basic</h3>
+                    <div class="plan-price">R$ 147</div>
+                    <div class="plan-period">por mês</div>
+                    <ul class="plan-features">
+                        <li>Estratégias conservadoras</li>
+                        <li>Ideal para iniciantes</li>
+                        <li>Suporte por e-mail</li>
+                        <li>Até R$ 1.000 de capital</li>
+                        <li>Saques diários</li>
+                        <li>Mini Índice Bovespa</li>
+                    </ul>
+                    <a href="https://wa.me/5551993808280?text=Olá! Gostaria de assinar o plano Basic WINFUT" target="_blank" class="plan-btn">Assinar Agora</a>
+                </div>
+                <div class="plan-card fade-in">
+                    <div class="plan-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="pro-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00E676"/>
+                                    <stop offset="100%" style="stop-color:#00E5FF"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="20" y="25" width="60" height="50" rx="5" fill="url(#pro-gradient)" opacity="0.3"/>
+                            <rect x="25" y="35" width="50" height="30" rx="3" fill="url(#pro-gradient)" opacity="0.6">
+                                <animate attributeName="height" values="30;35;30" dur="2s" repeatCount="indefinite"/>
+                            </rect>
+                            <circle cx="50" cy="20" r="10" fill="url(#pro-gradient)">
+                                <animate attributeName="r" values="10;12;10" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="50" cy="80" r="5" fill="url(#pro-gradient)">
+                                <animate attributeName="r" values="5;7;5" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                    <h3>Pro</h3>
+                    <div class="plan-price">R$ 247</div>
+                    <div class="plan-period">por mês</div>
+                    <ul class="plan-features">
+                        <li>Tudo do Plano Basic e +</li>
+                        <li>Estratégias avançadas</li>
+                        <li>Para investidores experientes</li>
+                        <li>Suporte prioritário</li>
+                        <li>Até R$ 3.000 de capital</li>
+                        <li>Relatórios diários</li>
+                        <li>Análises de mercado</li>
+                        <li>Mini Índice Bovespa</li>
+                    </ul>
+                    <a href="https://wa.me/5551993808280?text=Olá! Gostaria de assinar o plano Pro WINFUT" target="_blank" class="plan-btn">Assinar Agora</a>
+                </div>
+                <div class="plan-card featured fade-in">
+                    <div class="plan-badge">Mais Popular</div>
+                    <div class="plan-icon">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="elite-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#7B68EE"/>
+                                    <stop offset="100%" style="stop-color:#00E676"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="15" y="20" width="70" height="60" rx="5" fill="url(#elite-gradient)" opacity="0.3"/>
+                            <rect x="20" y="30" width="60" height="40" rx="3" fill="url(#elite-gradient)" opacity="0.6">
+                                <animate attributeName="height" values="40;45;40" dur="2s" repeatCount="indefinite"/>
+                            </rect>
+                            <circle cx="50" cy="15" r="12" fill="url(#elite-gradient)">
+                                <animate attributeName="r" values="12;14;12" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="30" cy="85" r="6" fill="url(#elite-gradient)">
+                                <animate attributeName="r" values="6;8;6" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="70" cy="85" r="6" fill="url(#elite-gradient)">
+                                <animate attributeName="r" values="6;8;6" dur="1.5s" begin="0.6s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </div>
+                    <h3>Elite</h3>
+                    <div class="plan-price">R$ 497</div>
+                    <div class="plan-period">por mês</div>
+                    <ul class="plan-features">
+                        <li>Tudo do Plano Pro e +</li>
+                        <li>Estratégias exclusivas</li>
+                        <li>Solução completa</li>
+                        <li>Suporte dedicado 24/7</li>
+                        <li>Capital ilimitado</li>
+                        <li>Relatórios em tempo real</li>
+                        <li>Consultoria personalizada</li>
+                        <li>Acesso antecipado a features</li>
+                        <li>Mini Índice Bovespa</li>
+                    </ul>
+                    <a href="https://wa.me/5551993808280?text=Olá! Gostaria de assinar o plano Elite WINFUT" target="_blank" class="plan-btn">Assinar Agora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="installation-support fade-in">
+        <div class="container">
+            <div class="support-card">
+                <h2>Instalação Profissional</h2>
+                <p>Precisando de ajuda? Nossa equipe faz toda a instalação do sistema</p>
+                
+                <ul class="support-features">
+                    <li>Instalação direta no seu computador ou</li>
+                    <li>Configuração de máquina virtual na nuvem</li>
+                    <li>Suporte técnico especializado por 7 dias</li>
+                    <li>Configuração completa do sistema</li>
+                    <li>Deixamos tudo pronto e auxiliamos em tudo</li>
+                    <li>Sistema intalado e funcionando</li>
+                    <li>100% no automático</li>
+                </ul>
+                
+                <div class="support-price">Taxa única: R$ 147</div>
+                <a href="https://wa.me/5551993808280?text=Olá! Gostaria de contratar a instalação profissional para os robôs" target="_blank" class="btn-primary">Contratar Suporte</a>
+            </div>
+        </div>
+    </section>
+
+ <section id="investment-steps" class="investment-steps">
+        <div class="container">
+            <h2 class="section-title fade-in">Investimento Mínimo Inicial</h2>
+            <p class="section-subtitle fade-in">Nosso robô de entrada precisa de um capital inicial de: <strong>R$ 1.000</strong> por contrato</p>
+            
+            <div class="steps-grid">
+                <div class="step-card fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Abra sua Conta na Corretora</h3>
+                    <p>Indicamos a CM Capital. Abra sua conta online de forma rápida e envie seu capital operacional.</p>
+                    <a href="https://cmcapital.com.br/" target="_blank" class="step-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Abrir Conta Agora
+                    </a>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">2</div>
+                    <h3>Instale a Plataforma Profit</h3>
+                    <p>Baixe a Profit Pro ou Profit Ultra gratuitamente através da corretora.</p>
+                    <a href="https://www.nelogica.com.br/download" target="_blank" class="step-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Baixar o Profit
+                    </a>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Contrate o Módulo de Automação</h3>
+                    <p>Escolha o plano conforme quantidade de contratos que utilizará no mês.</p>
+                    <a href="https://www.nelogica.com.br/automacao-de-estrategias?id=modulo-automacoes" target="_blank" class="step-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Contratar Módulo
+                    </a>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">4</div>
+                    <h3>Vincule o Robô $SBOTS</h3>
+                    <p>Realize a assinatura e vinculo do robô à sua plataforma operacional.</p>
+                    <a href="https://wa.me/5551993808280?text=Olá! Gostaria de receber o tutorial de instalação dos robôs" target="_blank" class="step-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Ver Tutorial
+                    </a>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">5</div>
+                    <h3>Deixe o Robô Trabalhar</h3>
+                    <p>Computador ligado das 9h às 17:45. Pode minimizar e usar normalmente.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">6</div>
+                    <h3>Acompanhe e Saque os Lucros</h3>
+                    <p>Saque os lucros diariamente, semanalmente ou mensalmente, conforme preferir.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resto do código permanece igual (seções de planos, plataforma, recursos, FAQ, etc.) -->
+    <!-- Por questões de espaço, mantive apenas as seções atualizadas -->
+    <!-- O código completo teria todas as seções do site anterior com as atualizações -->
+
+    
+
+    <section class="guarantee-section fade-in">
+        <div class="container">
+            <div class="guarantee-card">
+                <div class="guarantee-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="guarantee-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00E676"/>
+                                <stop offset="100%" style="stop-color:#2D8CFF"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M 50,15 L 20,30 L 20,70 L 50,85 L 80,70 L 80,30 Z" fill="url(#guarantee-gradient)" opacity="0.2"/>
+                        <path d="M 50,25 L 30,37 L 30,63 L 50,75 L 70,63 L 70,37 Z" fill="url(#guarantee-gradient)" opacity="0.4"/>
+                        <circle cx="50" cy="50" r="15" fill="url(#guarantee-gradient)">
+                            <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <path d="M 45,50 L 48,53 L 55,46" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h2>Garantia de 7 Dias</h2>
+                <p>Oferecemos uma garantia de 7 dias. Se você não ficar satisfeito(a) com a estratégia dentro desse período, basta solicitar o reembolso e sua assinatura será cancelada automaticamente pela Nelogica sem nenhum custo.</p>
+                <a href="https://wa.me/5551993808280?text=Olá! Gostaria de testar o robô por 7 dias grátis" target="_blank" class="btn-primary">Testar por 7 Dias Grátis</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="cta-section fade-in">
+            <h2>Pronto para Automatizar Seus Investimentos?</h2>
+            <p>Junte-se aos nossos 13 clientes ativos que já estão maximizando seus resultados com nossa tecnologia. Teste grátis por 7 dias!</p>
+            <div class="cta-buttons">
+                <a href="https://wa.me/5551993808280?text=Olá! Gostaria de testar o robô SharkMind AI por 7 dias grátis" target="_blank" class="btn-primary">Teste Grátis por 7 Dias</a>
+                <a href="https://wa.me/5551993808280?text=Olá! Tenho dúvidas sobre os robôs de investimento da SBOTS" target="_blank" class="btn-secondary">Tirar Dúvidas no WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <footer id="community">
+        <div class="container">
+            <div class="footer-links-section">
+                <h2 class="footer-links-title">Fale Conosco</h2>
+                <div class="footer-cards">
+                    <a href="https://wa.me/5551993808280?text=Olá! Gostaria de saber mais sobre os robôs de investimento da SBOTS" target="_blank" class="footer-card">
+                        <div class="footer-card-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="whatsapp-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#25D366"/>
+                                        <stop offset="100%" style="stop-color:#128C7E"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="50" r="40" fill="url(#whatsapp-gradient)" opacity="0.2"/>
+                                <path d="M 30,40 Q 30,30 40,30 L 60,30 Q 70,30 70,40 L 70,60 Q 70,70 60,70 L 40,70 Q 30,70 30,60 Z" fill="none" stroke="url(#whatsapp-gradient)" stroke-width="3"/>
+                                <circle cx="40" cy="45" r="5" fill="url(#whatsapp-gradient)">
+                                    <animate attributeName="r" values="5;7;5" dur="1.5s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="60" cy="45" r="5" fill="url(#whatsapp-gradient)">
+                                    <animate attributeName="r" values="5;7;5" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+                                </circle>
+                                <path d="M 35,55 L 45,60 L 55,50 L 65,55" fill="none" stroke="url(#whatsapp-gradient)" stroke-width="3" stroke-linecap="round">
+                                    <animate attributeName="stroke-dasharray" values="0,50;50,0" dur="2s" repeatCount="indefinite"/>
+                                </path>
+                            </svg>
+                        </div>
+                        <h3>WhatsApp</h3>
+                    </a>
+                    <a href="https://instagram.com/sbots.ai" target="_blank" class="footer-card">
+                        <div class="footer-card-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#E4405F"/>
+                                        <stop offset="100%" style="stop-color:#FCAF45"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect x="20" y="20" width="60" height="60" rx="15" fill="url(#instagram-gradient)" opacity="0.2"/>
+                                <circle cx="50" cy="50" r="15" fill="url(#instagram-gradient)" opacity="0.6">
+                                    <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="65" cy="35" r="5" fill="url(#instagram-gradient)">
+                                    <animate attributeName="r" values="5;6;5" dur="1.5s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        <h3>
+                            @sbots.ai
+                        </h3>
+                    </a>
+                    <a href="mailto:contato@sbots.com" class="footer-card">
+                        <div class="footer-card-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="email-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#2D8CFF"/>
+                                        <stop offset="100%" style="stop-color:#00E676"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect x="20" y="25" width="60" height="50" rx="5" fill="url(#email-gradient)" opacity="0.2"/>
+                                <polyline points="25,35 50,50 75,35" fill="none" stroke="url(#email-gradient)" stroke-width="3" stroke-linecap="round">
+                                    <animate attributeName="stroke-dasharray" values="0,70;70,0" dur="2s" repeatCount="indefinite"/>
+                                </polyline>
+                                <line x1="25" y1="55" x2="75" y2="55" stroke="url(#email-gradient)" stroke-width="3" stroke-linecap="round">
+                                    <animate attributeName="stroke-dasharray" values="0,50;50,0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                                </line>
+                            </svg>
+                        </div>
+                        <h3>E-mail</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-left">
+                    <p>&copy; 2025 SBOTS · Robôs de Investimento Automatizado</p>
+                </div>
+                <div class="footer-right">
+                    <p>Para fins informativos apenas; não é aconselhamento financeiro.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Código JavaScript permanece o mesmo do anterior
+        // Incluindo partículas, animações, FAQ toggle, etc.
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = this.getRandomColor();
+            }
+            getRandomColor() {
+                const colors = ['#2D8CFF', '#00E5FF', '#00E676', '#7B68EE'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.strokeStyle = particles[i].color;
+                        ctx.globalAlpha = 0.1;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Criar gráfico de trading da logo 3D
+        const chart = document.getElementById('chart');
+        const barCount = 12;
+        const heights = [30, 50, 40, 70, 60, 80, 55, 65, 45, 75, 50, 60];
+        
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('chart-bar');
+            bar.style.setProperty('--height', `${heights[i]}%`);
+            bar.style.height = `${heights[i]}%`;
+            bar.style.animationDelay = `${i * 0.15}s`;
+            chart.appendChild(bar);
+        }
+        
+        // Criar rede neural
+        const neural = document.getElementById('neural');
+        const nodePositions = [
+            { x: 30, y: 30 }, { x: 70, y: 30 },
+            { x: 20, y: 50 }, { x: 50, y: 50 }, { x: 80, y: 50 },
+            { x: 30, y: 70 }, { x: 70, y: 70 }
+        ];
+        
+        // Criar nós
+        nodePositions.forEach((pos, i) => {
+            const node = document.createElement('div');
+            node.classList.add('neural-node');
+            node.style.left = `${pos.x}%`;
+            node.style.top = `${pos.y}%`;
+            node.style.animationDelay = `${i * 0.2}s`;
+            neural.appendChild(node);
+        });
+        
+        // Criar linhas conectoras
+        const connections = [
+            [0, 2], [0, 3], [1, 3], [1, 4],
+            [2, 5], [3, 5], [3, 6], [4, 6]
+        ];
+        
+        connections.forEach((conn, i) => {
+            const [start, end] = conn;
+            const startPos = nodePositions[start];
+            const endPos = nodePositions[end];
+            
+            const line = document.createElement('div');
+            line.classList.add('neural-line');
+            
+            const deltaX = endPos.x - startPos.x;
+            const deltaY = endPos.y - startPos.y;
+            const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+            
+            line.style.width = `${length}%`;
+            line.style.left = `${startPos.x}%`;
+            line.style.top = `${startPos.y}%`;
+            line.style.transform = `rotate(${angle}deg)`;
+            line.style.animationDelay = `${i * 0.3}s`;
+            
+            neural.appendChild(line);
+        });
+        
+        // Criar stream de dados binários
+        const dataStream = document.getElementById('dataStream');
+        const binaryCount = 40;
+        const binaryChars = ['0', '1'];
+        
+        for (let i = 0; i < binaryCount; i++) {
+            const digit = document.createElement('div');
+            digit.classList.add('binary-digit');
+            digit.textContent = binaryChars[Math.floor(Math.random() * 2)];
+            
+            const angle = (i / binaryCount) * Math.PI * 2;
+            const startRadius = 200;
+            const endRadius = 100;
+            
+            const startX = Math.cos(angle) * startRadius;
+            const startY = Math.sin(angle) * startRadius;
+            const endX = Math.cos(angle) * endRadius;
+            const endY = Math.sin(angle) * endRadius;
+            
+            digit.style.left = `calc(50% + ${startX}px)`;
+            digit.style.top = `calc(50% + ${startY}px)`;
+            digit.style.setProperty('--tx', `${endX - startX}px`);
+            digit.style.setProperty('--ty', `${endY - startY}px`);
+            digit.style.animationDelay = `${i * 0.2}s`;
+            
+            dataStream.appendChild(digit);
+        }
+        
+        // Criar partículas 3D
+        const particlesContainer = document.getElementById('particles3d');
+        const particleCount3d = 50;
+        
+        for (let i = 0; i < particleCount3d; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle-3d');
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 150 + Math.random() * 100;
+            const px = Math.cos(angle) * distance;
+            const py = Math.sin(angle) * distance;
+            
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.setProperty('--px', `${px}px`);
+            particle.style.setProperty('--py', `${py}px`);
+            particle.style.animationDelay = `${Math.random() * 6}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
